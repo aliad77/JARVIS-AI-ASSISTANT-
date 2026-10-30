@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #0b0b10;
+  --color-deck: #15151f;
+  --color-panel: #1d1b28;
+  --color-panel-hi: #262336;
+  --color-red: #ff4058;
+  --color-red-deep: #991b32;
+  --color-red-hi: #ff6979;
+  --color-ink: #f5f5f7;
+  --color-ink-dim: #a5a5b5;
+  --color-ok: #3ddc97;
+  --color-warn: #ffc857;
+
+  --font-pixel: "Press Start 2P", ui-monospace, monospace;
+  --font-body: "Inter", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+
+  --animate-blink: blink 4s steps(1) infinite;
+  --animate-pulse-red: pulse-red 1.6s ease-in-out infinite;
+  --animate-scan: scan 7s linear infinite;
+}
+
+@keyframes blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px var(--color-red)); }
+  50% { opacity: 0.55; filter: drop-shadow(0 0 8px var(--color-red)); }
+}
+@keyframes scan {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100vh); }
+}
+@keyframes status-blink {
+  0%, 60%, 100% { opacity: 1; }
+  80% { opacity: 0.25; }
+}
+.status-blink { animation: status-blink 2.4s steps(2) infinite; }
+
+@keyframes bar {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
+}
+
+:root {
+  color-scheme: dark;
+  --px: 4px;
+}
+
+html, body, #root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-void);
+  /* subtle pixel grid */
+  background-image:
+    linear-gradient(rgba(255, 64, 88, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 64, 88, 0.035) 1px, transparent 1px);
+  background-size: 16px 16px;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- pixel primitives ---------- */
+
+/* Stepped "pixel" frame: the corners are notched like 8-bit UI boxes. */
+.pixel-frame {
+  position: relative;
+  background: var(--color-panel);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--frame, #3a2f48),
+    0 var(--px) 0 0 var(--frame, #3a2f48),
+    calc(-1 * var(--px)) 0 0 0 var(--frame, #3a2f48),
+    var(--px) 0 0 0 var(--frame, #3a2f48);
+  margin: var(--px);
+}
+.pixel-frame--red {
+  --frame: var(--color-red);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--frame),
+    0 var(--px) 0 0 var(--frame),
+    calc(-1 * var(--px)) 0 0 0 var(--frame),
+    var(--px) 0 0 0 var(--frame),
+    0 0 24px -4px rgba(255, 64, 88, 0.45);
+}
+
+.pixel-title {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.neon {
+  text-shadow: 0 0 6px rgba(255, 64, 88, 0.75), 0 0 18px rgba(255, 64, 88, 0.35);
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  shape-rendering: crispEdges;
+}
+
+.pixel-btn {
+  font-family: var(--font-pixel);
+  text-transform: uppercase;
+  position: relative;
+  transition: transform 80ms steps(2), background-color 120ms, color 120ms, box-shadow 120ms;
+}
+.pixel-btn:active:not(:disabled) {
+  transform: translateY(2px);
+}
+.pixel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 3px solid var(--color-red-hi);
+  outline-offset: 3px;
+}
+
+.wave-bar {
+  transform-origin: center;
+  animation: bar 0.9s ease-in-out infinite;
+}
+
+.scanline {
+  pointer-events: none;
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 64, 88, 0.04), transparent);
+  animation: var(--animate-scan);
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-red-deep) transparent;
+}
+
+/* KaTeX tweaks for dark theme */
+.katex { font-size: 1.08em; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 4px 0; margin: 0.4em 0; }
+
+/* Reduced motion: honour both the OS setting and the in-app toggle */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  .scanline { display: none; }
+}
+[data-reduced-motion="true"] *, [data-reduced-motion="true"] *::before, [data-reduced-motion="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+[data-reduced-motion="true"] .scanline { display: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

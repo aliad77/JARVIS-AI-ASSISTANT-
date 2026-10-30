@@ -1,0 +1,55 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local data (conversation history)
+backend/data/
+*.sqlite3
+*.sqlite3-*
+
+# Node / frontend
+node_modules/
+frontend/dist/
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Additional secrets / credentials
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.*
+credentials*.json
+.npmrc
+
+# Local databases (may contain personal chat history)
+*.db
+*.sqlite
+*.db-journal
+
+# Build artifacts, caches, temp files
+build/
+dist/
+coverage/
+.vite/
+.cache/
+*.tmp
+*.temp
+*.swp
+.pytest_cache/
