@@ -23,7 +23,7 @@ export function SystemStatus() {
         ? { ok: null, label: `AI loading ${Math.round(aiStatus.progress * 100)}%` }
         : { ok: false, label: prefs.localAI.enabled ? "Local AI off" : "Lessons mode" };
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]" aria-label="System status">
+    <div className="relative flex max-w-full gap-2 overflow-x-auto pb-1 [scrollbar-width:none]" aria-label="System status">
       <StatusPill ok={true} label="System online" pulse />
       <StatusPill ok={true} label="Math engine" detail="Runs on this device" />
       <StatusPill ok={ai.ok} label={ai.label} detail="On-device AI is optional; lessons and math work without it" />
@@ -56,7 +56,7 @@ export function Header({ page, onNavigate }: { page: Page; onNavigate: (p: Page)
             </button>
           ))}
         </nav>
-        <div className="w-full">
+        <div className="w-full min-w-0">
           <SystemStatus />
         </div>
       </div>
